@@ -16,7 +16,7 @@ class NavBar extends StatelessWidget {
               flex: 1,
               child:
               Align(alignment: Alignment.centerLeft, child: FlutterLogo())),
-          Expanded(flex: 10, child: Center(child: SelectableText("data"))),
+          Expanded(flex: 10, child: Center(child: SelectableText("Selectors"))),
           Expanded(
               flex: 1,
               child: Align(

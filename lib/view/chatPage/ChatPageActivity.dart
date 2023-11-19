@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:websitefluttertest/widgets/navigationBar/navigation_bar.dart';
 import 'package:websitefluttertest/widgets/buttons/Buttons.dart';
 import 'package:websitefluttertest/widgets/buttons/ButtonsDynamicLists.dart';
+import 'package:websitefluttertest/APIConnections/connections.dart';
 
-class StandardBackground extends StatelessWidget {
-  const StandardBackground({super.key});
 
-  @override
+void fetchButtonData() async {
+  await loginTest();
+}
+
+class ChatPageLaunch extends StatelessWidget {
+  const ChatPageLaunch({super.key});
+
+    @override
   Widget build(BuildContext context) {
+    fetchButtonData();
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: const Column(
@@ -23,8 +30,16 @@ class StandardBackground extends StatelessWidget {
   }
 }
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget{
   const ChatPage({super.key});
+
+  @override
+  _ChatPage createState() => _ChatPage();
+}
+
+
+
+class _ChatPage extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +94,7 @@ class ChatPage extends StatelessWidget {
                               ),
 
                               child: const Center(
-                                child: Text("data"),
+                                child: Text("data2"),
                               )
                           ),
                         ),

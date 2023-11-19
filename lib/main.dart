@@ -10,7 +10,7 @@ class ChatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       routes: {
-        '/': (context) => const StandardBackground(),
+        '/': (context) => const ChatPageLaunch(),
       },
     );
   }
