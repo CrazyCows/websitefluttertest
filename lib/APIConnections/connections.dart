@@ -46,15 +46,29 @@ Future<void> loginTest() async {
   }
 }
 
+
+class ChatFolder {
+  final Map<String, dynamic> folderData;
+
+  ChatFolder({required this.folderData});
+}
+
 class ChatFolders {
-  final Map<int, String> folderDataSingle;
-  final List<ChatFolders> folderData;
+  final List<ChatFolder> folderData;
 
-  ChatFolders({required this.folderDataSingle});
+  ChatFolders({required this.folderData});
 
-  factory ChatFolders.fromJson(Map<int, String> json){
+  List<ChatFolder> getFolders(){
+    return folderData;
+  }
+
+  factory ChatFolders.fromJson(Map<String, dynamic> json){
+    List<ChatFolder> folders = json.entries.map((entry) {
+      return ChatFolder(folderData: {entry.key: entry.value});
+    }).toList();
+
     return ChatFolders(
-      folderDataSingle: json.map((key, value) => folderData)
+        folderData: folders
     );
   }
 }
@@ -64,18 +78,21 @@ class ChatFolders {
 Future<void> initialFetch() async {
   final Dio dio = Dio();
 
+  ChatFolder folder;
+
+  folder = ChatFolder(folderData: {"1": "hej"});
+
+
   try {
     final response = await dio.post(
       '$BASE_URL/auth/users/login/',
-      data: {'user_name': username, 'user_password': password},
       options: Options(
         contentType: Headers.jsonContentType,
       ),
 
     );
     if (response.statusCode == 200) {
-      final user = response.data['user'];
-      print(user);
+      ChatFolders.fromJson(response.data);
       // The cookies are automatically managed by Dio and CookieJar
     } else {
       print('Request failed with status: ${response.statusCode}.');
