@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:websitefluttertest/view/chatPage/ChatPageActivity.dart';
+import 'package:websitefluttertest/screens/chatPage/ChatPageActivity.dart';
 
 void main() => runApp(const ChatApp());
 
@@ -8,11 +8,23 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       routes: {
         '/': (context) => const ChatPageLaunch(),
       },
     );
+  }
+}
+
+class CounterModel with ChangeNotifier {
+  int _count = 0;
+
+  int get count => _count;
+
+  void increment() {
+    _count++;
+    notifyListeners();
   }
 }
 
