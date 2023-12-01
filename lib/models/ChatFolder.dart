@@ -1,8 +1,16 @@
 
 class ChatFolder {
-  final Map<String, dynamic> folderData;
+  final int id;
+  final String name;
 
-  ChatFolder({required this.folderData});
+  ChatFolder({required this.id, required this.name});
+
+  factory ChatFolder.fromJson(Map<String, dynamic> json) {
+    return ChatFolder(
+      id: json['id'] as int,
+      name: json['name'] as String,
+    );
+  }
 }
 
 class ChatFolders {
@@ -14,9 +22,10 @@ class ChatFolders {
     return folderData;
   }
 
+
   factory ChatFolders.fromJson(Map<String, dynamic> json){
-    List<ChatFolder> folders = json.entries.map((entry) {
-      return ChatFolder(folderData: {entry.key: entry.value});
+    List<ChatFolder> folders = json.values.map((folderJson) {
+      return ChatFolder.fromJson(folderJson);
     }).toList();
 
     return ChatFolders(

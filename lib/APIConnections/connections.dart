@@ -5,6 +5,7 @@ import 'package:dio/io.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 
+
 const BASE_URL = "https://127.0.0.1:8000";
 
 
@@ -47,41 +48,8 @@ Future<void> loginTest() async {
 }
 
 
-class ChatFolder {
-  final Map<String, dynamic> folderData;
-
-  ChatFolder({required this.folderData});
-}
-
-class ChatFolders {
-  final List<ChatFolder> folderData;
-
-  ChatFolders({required this.folderData});
-
-  List<ChatFolder> getFolders(){
-    return folderData;
-  }
-
-  factory ChatFolders.fromJson(Map<String, dynamic> json){
-    List<ChatFolder> folders = json.entries.map((entry) {
-      return ChatFolder(folderData: {entry.key: entry.value});
-    }).toList();
-
-    return ChatFolders(
-        folderData: folders
-    );
-  }
-}
-
-
-
-Future<void> initialFetch() async {
+Future<dynamic> fetchFolders() async {
   final Dio dio = Dio();
-
-  ChatFolder folder;
-
-  folder = ChatFolder(folderData: {"1": "hej"});
-
 
   try {
     final response = await dio.post(
@@ -92,7 +60,7 @@ Future<void> initialFetch() async {
 
     );
     if (response.statusCode == 200) {
-      ChatFolders.fromJson(response.data);
+      return response.data;
       // The cookies are automatically managed by Dio and CookieJar
     } else {
       print('Request failed with status: ${response.statusCode}.');
@@ -100,10 +68,7 @@ Future<void> initialFetch() async {
   } catch (error) {
     print(error);
   }
+  return [];
 }
 
-Future<void> initialLoad() async {
-  final Dio dio = createDioWithCookieJar();
-
-}
 
