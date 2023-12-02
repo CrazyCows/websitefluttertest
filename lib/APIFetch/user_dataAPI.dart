@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import '../APIConnections/createDioCon.dart';
 
-Future<dynamic> fetchFoldersData() async {
+Future<dynamic> fetchFoldersData(String path) async {
   final Dio dio = createDio().dio;
 
   try {
     final response = await dio.get(
-      '/user_resource/user/get-folders/',
+      '/user_resource/user/$path/',
       options: Options(
         contentType: Headers.jsonContentType,
       ),
