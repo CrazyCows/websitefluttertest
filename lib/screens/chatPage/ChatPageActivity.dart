@@ -1,18 +1,15 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:websitefluttertest/screens/chatPage/widgets/buttons/ButtonsDynamicLists.dart';
 import 'package:websitefluttertest/viewmodels/user_dataViewModel.dart';
-import 'package:websitefluttertest/widgets/navigationBar/navigation_bar.dart';
-import 'package:websitefluttertest/widgets/buttons/Buttons.dart';
-import 'package:websitefluttertest/widgets/buttons/ButtonsDynamicLists.dart';
 
 import '../../APIFetch/loginAPI.dart';
-import '../../APIFetch/user_dataAPI.dart';
-import '../../repository/user_dataRepository.dart';
-
-import 'package:provider/provider.dart';
+import 'widgets/navigationBar/navigation_bar.dart';
 
 void fetchButtonData() async {
   await loginTest();
-  await fetchFolders();
 }
 
 
@@ -35,7 +32,7 @@ class _ChatPage extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    
+
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -77,9 +74,7 @@ class _ChatPage extends State<ChatPage> {
                                 ),
                                 Expanded(
                                   flex: 13,
-                                  child: DynamicButtonList(
-                                      items: [HoverButton(text: "text"), HoverButton(text: "text2")]
-                                  ),
+                                  child: DynamicButtonList(),
                                 ),
                               ],
                             ),
@@ -104,9 +99,7 @@ class _ChatPage extends State<ChatPage> {
                                 Expanded(
                                   flex: 13,
                                   child: DynamicButtonList(
-                                      items: [
-                                        ...List.generate(30, (index) => HoverButton(text: "Button ${index + 1}")),
-                                      ]
+
                                   ),
                                 ),
                               ],

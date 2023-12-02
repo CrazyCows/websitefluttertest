@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:websitefluttertest/models/ChatFolder.dart';
-import '../APIFetch/user_dataAPI.dart';
 import '../repository/user_dataRepository.dart';
 
 
@@ -12,6 +11,9 @@ class ViewModeluser_data extends ChangeNotifier {
     bool get isLoading => _isLoading;
 
 
+  ViewModeluser_data(){
+    loadFolders();
+  }
 
 
     void loadFolders() async {
@@ -21,6 +23,7 @@ class ViewModeluser_data extends ChangeNotifier {
         var foldersJson = await fetchFolders();
         _folders.clear();
         _folders.addAll(foldersJson);
+        print(foldersJson);
         notifyListeners();
       } catch (error){
         var _errormessage = error.toString();
