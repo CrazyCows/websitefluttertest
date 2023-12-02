@@ -11,22 +11,13 @@ class ChatApp extends StatelessWidget {
 
     return MaterialApp(
       routes: {
-        '/': (context) => const ChatPageLaunch(),
+        '/': (context) => const ChatPage(),
       },
     );
   }
 }
 
-class CounterModel with ChangeNotifier {
-  int _count = 0;
 
-  int get count => _count;
-
-  void increment() {
-    _count++;
-    notifyListeners();
-  }
-}
 
 
 
