@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:websitefluttertest/models/ChatFolder.dart';
 import 'package:websitefluttertest/viewmodels/user_dataViewModel.dart';
 
 class HoverButton extends StatefulWidget {
-  final String text;
+  final ChatFolder folder;
 
-  const HoverButton({Key? key, required this.text}) : super(key: key);
+  const HoverButton({Key? key, required this.folder}) : super(key: key);
 
   @override
-  _HoverButtonState createState() => _HoverButtonState();
+  State<HoverButton> createState() => _HoverButtonState();
 }
 
 class _HoverButtonState extends State<HoverButton>
     with SingleTickerProviderStateMixin {
-  bool isHovered = false;
+
+
+
 
   late AnimationController _controller;
   late Animation<Color?> _animation;
+
+
 
   @override
   void initState() {
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
     // Adjust these colors as needed for your hover effect
     _animation = ColorTween(begin: Colors.lightBlue[300], end: Colors.lightBlue)
         .animate(_controller);
@@ -36,37 +41,47 @@ class _HoverButtonState extends State<HoverButton>
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (event) => _controller.forward(),
-      onExit: (event) => _controller.reverse(),
-      child: AnimatedBuilder(
-        animation: _animation,
-        builder: (context, child) {
-          return Container(
-
-            alignment: Alignment.center,
-
-            decoration: BoxDecoration(
-              color: _animation.value,
+    return Consumer<ViewModeluser_data>(
+        builder: (context, viewModel, child) {
+          return MouseRegion(
+            onEnter: (event) => _controller.forward(),
+            onExit: (event) {
+              if(!viewModel.getSelectedFolders.contains(widget.folder)) {
+                _controller.reverse();
+              }
+            },
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: _animation.value,
+                  ),
+                  child: child,
+                );
+              },
+              child: InkWell(
+                onTap: () {
+                  viewModel.addSelectFolders(widget.folder);
+                  // Handle tap if necessary
+                },
+                child: Center(
+                  child: Text(widget.folder.name),
+                ),
+              ),
             ),
-            child: child,
           );
-        },
-        child: InkWell(
-          onTap: () {
-            // Handle tap if necessary
-          },
-          child: Center(
-            child: Text(widget.text),
-          ),
-        ),
-      ),
+        }
+
     );
   }
 }
 
 class DynamicButtonList extends StatelessWidget {
-  final double itemHeightPercentage = 0.03; // 3% of the screen height
+  final double itemHeightPercentage = 0.03;
+
+  const DynamicButtonList({super.key}); // 3% of the screen height
 
 
   @override
@@ -77,13 +92,13 @@ class DynamicButtonList extends StatelessWidget {
 
         // Checking if the data is loading
         if (viewModel.isLoading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         // Creating the list from the folders
         List<Widget> items = viewModel.folders.map((folder) {
           return HoverButton(
-            text: folder.name,
+            folder: folder,
           );
         }).toList();
 

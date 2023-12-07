@@ -6,17 +6,26 @@ import '../repository/user_dataRepository.dart';
 
 
 class ViewModeluser_data extends ChangeNotifier {
-    List<ChatFolder> _folders = [];
+    final List<ChatFolder> _folders = [];
+    final List<ChatFolder> _selectedFolders = [];
     bool _isLoading = true;
 
     List<ChatFolder> get folders => _folders;
+    List<ChatFolder> get getSelectedFolders => _selectedFolders;
     bool get isLoading => _isLoading;
 
 
-  ViewModeluser_data(){
-    loadFolders();
-  }
+    ViewModeluser_data(){
+      loadFolders();
+    }
 
+    void addSelectFolders(ChatFolder folder) {
+      if (!_selectedFolders.contains(folder)) {
+        _selectedFolders.add(folder);
+      } else {
+        _selectedFolders.remove(folder);
+      }
+    }
 
     void loadFolders() async {
       _folders.clear();
@@ -39,6 +48,7 @@ class ViewModeluser_data extends ChangeNotifier {
       _isLoading = loading;
       notifyListeners();
     }
+
 
 
 }

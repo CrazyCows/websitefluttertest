@@ -2,6 +2,7 @@
 class ChatFolder {
   final int id;
   final String name;
+  bool isClicked = false;
 
   ChatFolder({required this.id, required this.name});
 
@@ -12,5 +13,3 @@ class ChatFolder {
     );
   }
 }
-
-
