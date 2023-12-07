@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import '../APIConnections/createDioCon.dart';
 
-Future<dynamic> fetchFoldersData(String path) async {
+Future<dynamic> fetchUserData(String path) async {
   final Dio dio = createDio().dio;
 
   try {

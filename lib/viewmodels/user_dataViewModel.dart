@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:websitefluttertest/models/ChatFolder.dart';
+import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
 import '../repository/user_dataRepository.dart';
 
 

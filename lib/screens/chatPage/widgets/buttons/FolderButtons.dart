@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:websitefluttertest/models/ChatFolder.dart';
+import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
 import 'package:websitefluttertest/viewmodels/user_dataViewModel.dart';
 
 class HoverButton extends StatefulWidget {
