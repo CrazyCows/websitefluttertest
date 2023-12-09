@@ -4,79 +4,78 @@ import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
 import 'package:websitefluttertest/viewmodels/ChatFolderWM.dart';
 
 class HoverButton extends StatefulWidget {
-  final ChatFolder folder;
+  final Widget child;
+  final Color hoverColor;
+  final Color normalColor;
+  final Color selectedColor;
+  final VoidCallback? onTap;
 
-  const HoverButton({Key? key, required this.folder}) : super(key: key);
+  const HoverButton({
+    Key? key,
+    required this.child,
+    this.hoverColor = Colors.lightBlue,
+    this.normalColor = Colors.lightBlueAccent,
+    this.selectedColor = Colors.deepPurple,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   State<HoverButton> createState() => _HoverButtonState();
 }
 
-class _HoverButtonState extends State<HoverButton>
-    with SingleTickerProviderStateMixin {
-
-
-
-
+class _HoverButtonState extends State<HoverButton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _animation;
-
-
+  bool _isSelected = false;
 
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
-    // Adjust these colors as needed for your hover effect
-    _animation = ColorTween(begin: Colors.lightBlue[300], end: Colors.lightBlue)
-        .animate(_controller);
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    _animation = ColorTween(begin: widget.normalColor, end: widget.hoverColor).animate(_controller);
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  void _toggleSelected() {
+    setState(() {
+      _isSelected = !_isSelected;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChatFolderWM>(
-        builder: (context, viewModel, child) {
-          return MouseRegion(
-            onEnter: (event) => _controller.forward(),
-            onExit: (event) {
-              if(!viewModel.getSelectedFolders.contains(widget.folder)) {
-                _controller.reverse();
-              }
+    return MouseRegion(
+      onEnter: (event) {
+        if (!_isSelected) {
+          _controller.forward();
+        }
+      },
+      onExit: (event) {
+        if (!_isSelected) {
+          _controller.reverse();
+        }
+      },
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return GestureDetector(
+            onTap: () {
+              _toggleSelected();
+              widget.onTap?.call();
             },
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: _animation.value,
-                  ),
-                  child: child,
-                );
-              },
-              child: InkWell(
-                onTap: () {
-                  viewModel.addSelectFolders(widget.folder);
-                  // Handle tap if necessary
-                },
-                child: Center(
-                  child: Text(widget.folder.name),
-                ),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: _isSelected ? widget.selectedColor : _animation.value,
               ),
+              child: widget.child,
             ),
           );
-        }
-
+        },
+      ),
     );
   }
 }
+
 
 class DynamicButtonList extends StatelessWidget {
   final double itemHeightPercentage = 0.03;
@@ -98,7 +97,11 @@ class DynamicButtonList extends StatelessWidget {
         // Creating the list from the folders
         List<Widget> items = viewModel.folders.map((folder) {
           return HoverButton(
-            folder: folder,
+            child: Text(folder.name),
+            onTap: () => viewModel.toggleSelectedFolder(folder),
+            hoverColor: Colors.lightBlue[300]!,
+            normalColor: Colors.lightBlue,
+            selectedColor: Colors.deepPurple,
           );
         }).toList();
 

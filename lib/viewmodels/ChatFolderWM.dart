@@ -18,7 +18,7 @@ class ChatFolderWM extends ChangeNotifier {
       loadFolders();
     }
 
-    void addSelectFolders(ChatFolder folder) {
+    void toggleSelectedFolder(ChatFolder folder) {
       if (!_selectedFolders.contains(folder)) {
         _selectedFolders.add(folder);
       } else {
