@@ -5,7 +5,7 @@ import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
 import '../repository/user_dataRepository.dart';
 
 
-class ViewModeluser_data extends ChangeNotifier {
+class ChatFolderWM extends ChangeNotifier {
     final List<ChatFolder> _folders = [];
     final List<ChatFolder> _selectedFolders = [];
     bool _isLoading = true;
@@ -14,8 +14,7 @@ class ViewModeluser_data extends ChangeNotifier {
     List<ChatFolder> get getSelectedFolders => _selectedFolders;
     bool get isLoading => _isLoading;
 
-
-    ViewModeluser_data(){
+    ChatFolderWM(){
       loadFolders();
     }
 
@@ -48,7 +47,6 @@ class ViewModeluser_data extends ChangeNotifier {
       _isLoading = loading;
       notifyListeners();
     }
-
 
 
 }

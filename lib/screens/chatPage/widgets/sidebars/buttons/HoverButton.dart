@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
-import 'package:websitefluttertest/viewmodels/user_dataViewModel.dart';
+import 'package:websitefluttertest/viewmodels/ChatFolderWM.dart';
 
 class HoverButton extends StatefulWidget {
   final ChatFolder folder;
@@ -41,7 +41,7 @@ class _HoverButtonState extends State<HoverButton>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ViewModeluser_data>(
+    return Consumer<ChatFolderWM>(
         builder: (context, viewModel, child) {
           return MouseRegion(
             onEnter: (event) => _controller.forward(),
@@ -86,7 +86,7 @@ class DynamicButtonList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ViewModeluser_data>(
+    return Consumer<ChatFolderWM>(
       builder: (context, viewModel, child) {
         double itemHeight = MediaQuery.of(context).size.height * itemHeightPercentage;
 

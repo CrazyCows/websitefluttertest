@@ -1,4 +1,5 @@
 
+
 class HistoryFolder {
   final int chat_id;
   final String title;
@@ -12,8 +13,7 @@ class HistoryFolder {
       chat_id: json['chat_id'] as int,
       title: json['title'] as String,
       description: json['description'] as String,
-      folder_ids: List<int>.from(json['folder_ids'].map((folder_id) => folder_id as int))
-
+      folder_ids: json['folder_ids'].map((folder_id) => folder_id as int).toList(),
     );
   }
 }
@@ -33,5 +33,5 @@ class History {
     type: json['type'] as String,
     );
   }
-
 }
+

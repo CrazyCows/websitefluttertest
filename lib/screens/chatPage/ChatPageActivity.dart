@@ -1,7 +1,7 @@
 import 'dart:js';
 
 import 'package:flutter/material.dart';
-import 'package:websitefluttertest/screens/chatPage/widgets/buttons/FolderButtons.dart';
+import 'package:websitefluttertest/screens/chatPage/widgets/sidebars/buttons/HoverButton.dart';
 
 import '../../APIFetch/loginAPI.dart';
 import 'widgets/navigationBar/navigation_bar.dart';
