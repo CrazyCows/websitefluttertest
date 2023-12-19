@@ -7,24 +7,16 @@ import '../repository/user_dataRepository.dart';
 
 class ChatFolderWM extends ChangeNotifier {
     final List<ChatFolder> _folders = [];
-    final List<ChatFolder> _selectedFolders = [];
     bool _isLoading = true;
 
     List<ChatFolder> get folders => _folders;
-    List<ChatFolder> get getSelectedFolders => _selectedFolders;
     bool get isLoading => _isLoading;
 
     ChatFolderWM(){
       loadFolders();
     }
 
-    void toggleSelectedFolder(ChatFolder folder) {
-      if (!_selectedFolders.contains(folder)) {
-        _selectedFolders.add(folder);
-      } else {
-        _selectedFolders.remove(folder);
-      }
-    }
+
 
     void loadFolders() async {
       _folders.clear();
@@ -48,5 +40,14 @@ class ChatFolderWM extends ChangeNotifier {
       notifyListeners();
     }
 
+    void toggleClickedFolders(ChatFolder folder) {
+      folder.isClicked = !folder.isClicked;
+      print(folder.isClicked);
+      notifyListeners();
+    }
+
+    bool isFolderClicked(ChatFolder folder) {
+      return folder.isClicked;
+    }
 
 }

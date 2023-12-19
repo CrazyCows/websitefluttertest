@@ -9,6 +9,7 @@ class HoverButton extends StatefulWidget {
   final Color normalColor;
   final Color selectedColor;
   final VoidCallback? onTap;
+  final bool isClicked;
 
   const HoverButton({
     Key? key,
@@ -17,106 +18,101 @@ class HoverButton extends StatefulWidget {
     this.normalColor = Colors.lightBlueAccent,
     this.selectedColor = Colors.deepPurple,
     this.onTap,
+    this.isClicked = false,
   }) : super(key: key);
 
   @override
-  State<HoverButton> createState() => _HoverButtonState();
+  _HoverButtonState createState() => _HoverButtonState();
 }
 
 class _HoverButtonState extends State<HoverButton> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Color?> _animation;
-  bool _isSelected = false;
+  late AnimationController _animationController;
+  late Animation<Color?> _colorAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
-    _animation = ColorTween(begin: widget.normalColor, end: widget.hoverColor).animate(_controller);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600), // Duration of the fade animation
+    );
+
+    _colorAnimation = ColorTween(
+      begin: widget.normalColor,
+      end: widget.hoverColor,
+    ).animate(_animationController);
   }
 
-  void _toggleSelected() {
-    setState(() {
-      _isSelected = !_isSelected;
-    });
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (event) {
-        if (!_isSelected) {
-          _controller.forward();
-        }
-      },
-      onExit: (event) {
-        if (!_isSelected) {
-          _controller.reverse();
-        }
-      },
-      child: AnimatedBuilder(
-        animation: _animation,
-        builder: (context, child) {
-          return GestureDetector(
-            onTap: () {
-              _toggleSelected();
-              widget.onTap?.call();
-            },
-            child: Container(
+      onEnter: (_) => _animationController.forward(),
+      onExit: (_) => _animationController.reverse(),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedBuilder(
+          animation: _colorAnimation,
+          builder: (context, child) {
+            return Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: _isSelected ? widget.selectedColor : _animation.value,
+                color: widget.isClicked ? widget.selectedColor : _colorAnimation.value,
               ),
               child: widget.child,
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
 }
 
 
-class DynamicButtonList extends StatelessWidget {
-  final double itemHeightPercentage = 0.03;
+class FolderButton extends StatelessWidget {
+  final ChatFolder folder;
 
-  const DynamicButtonList({super.key}); // 3% of the screen height
-
+  const FolderButton({Key? key, required this.folder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatFolderWM>(
-      builder: (context, viewModel, child) {
-        double itemHeight = MediaQuery.of(context).size.height * itemHeightPercentage;
-
-        // Checking if the data is loading
-        if (viewModel.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        // Creating the list from the folders
-        List<Widget> items = viewModel.folders.map((folder) {
-          return HoverButton(
-            child: Text(folder.name),
-            onTap: () => viewModel.toggleSelectedFolder(folder),
-            hoverColor: Colors.lightBlue[300]!,
-            normalColor: Colors.lightBlue,
-            selectedColor: Colors.deepPurple,
-          );
-        }).toList();
-
-        // Building the ListView with the folders
-        return ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return SizedBox(
-              height: itemHeight,
-              child: items[index],
-            );
-          },
+      builder: (context, viewModel, _) {
+        bool isClicked = viewModel.isFolderClicked(folder);
+        return HoverButton(
+          child: Text(folder.name),
+          onTap: () => viewModel.toggleClickedFolders(folder),
+          isClicked: isClicked,
         );
       },
     );
   }
 }
 
+class DynamicButtonList extends StatelessWidget {
+  static const double itemHeightPercentage = 0.03;
+
+  const DynamicButtonList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ChatFolderWM>(
+      builder: (context, viewModel, _) {
+        if (viewModel.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        double itemHeight = MediaQuery.of(context).size.height * itemHeightPercentage;
+        List<Widget> items = viewModel.folders.map((folder) => FolderButton(folder: folder)).toList();
+        return ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (_, index) => SizedBox(height: itemHeight, child: items[index]),
+        );
+      },
+    );
+  }
+}
