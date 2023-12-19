@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'buttons/FolderButtons.dart';
 import 'buttons/HoverButton.dart';
 
 class LeftSideBar extends StatelessWidget {
@@ -33,7 +34,7 @@ class LeftSideBar extends StatelessWidget {
                       ),
                       const Expanded(
                         flex: 13,
-                        child: DynamicButtonList(),
+                        child: FolderSettingsButton(),
                       ),
                     ],
                   ),
@@ -57,7 +58,7 @@ class LeftSideBar extends StatelessWidget {
                       ),
                       const Expanded(
                         flex: 13,
-                        child: DynamicButtonList(),
+                        child: HistoryButtons(),
                       ),
                     ],
                   ),

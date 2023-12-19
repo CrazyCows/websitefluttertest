@@ -73,13 +73,9 @@ class _HoverButtonState extends State<HoverButton> with SingleTickerProviderStat
   }
 }
 
-
-
-
-class HistoryButtons extends StatelessWidget {
+class FolderSettingsButton extends StatelessWidget {
+  const FolderSettingsButton({Key? key}) : super(key: key);
   static const double itemHeightPercentage = 0.03;
-
-  const HistoryButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +95,35 @@ class HistoryButtons extends StatelessWidget {
 
             return SizedBox(
               height: itemHeight,
-              child: HoverButton(
-                child: Text(folder.name),
-                onTap: () => viewModel.toggleClickedFolders(folder),
-                isClicked: isClicked,
-              ),
+              child: Row(
+                children: [
+                  HoverButton(
+                    child: const Icon(Icons.settings),
+                    onTap: () => viewModel.toggleClickedFolders(folder),
+                    isClicked: isClicked,
+                  ),
+                  HoverButton(
+                      child: const Icon(Icons.settings),
+                      onTap: () => viewModel.toggleClickedFolders(folder),
+                      isClicked: isClicked,
+                  )],
+
+              )
+
             );
           },
         );
-      },
+
+
+
+
+
+      }
     );
   }
+
+
+
 }
+
+
