@@ -20,18 +20,10 @@ Future<List<ChatFolder>> fetchHistory() async {
 }
  */
 
-Future<List<History>> fetchHistory() async {
-  var jsonData = await fetchUserData('get-folders');
-  jsonData = jsonData['chat-history'] as List;
-  if (jsonData is List) {
-    return jsonData.map((item) => History.fromJson(item)).toList();
-  }
-  return [];
-}
 
 Future<List<HistoryFolder>> fetchHistoryFolders() async {
-  var jsonData = await fetchUserData('get-folders');
-  jsonData = jsonData['chat-history-folders'] as List;
+  var jsonData = await fetchUserData('chat-history-folders');
+  jsonData = jsonData['chat_history_folders'] as List;
   if (jsonData is List) {
     return jsonData.map((item) => HistoryFolder.fromJson(item)).toList();
   }

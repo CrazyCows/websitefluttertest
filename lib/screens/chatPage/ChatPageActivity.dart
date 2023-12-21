@@ -1,7 +1,5 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:websitefluttertest/screens/chatPage/widgets/sidebars/buttons/HoverButton.dart';
+import 'package:websitefluttertest/screens/chatPage/widgets/chat/Chat.dart';
 
 import '../../APIFetch/loginAPI.dart';
 import 'widgets/navigationBar/navigation_bar.dart';
@@ -60,7 +58,7 @@ class _ChatPage extends State<ChatPage> {
                         ),
                       ),
                       child: const Center(
-                        child: SelectableText("chatpage incoming"),
+                        child: ChatScreen(),
                       ),
                     ),
                   ),

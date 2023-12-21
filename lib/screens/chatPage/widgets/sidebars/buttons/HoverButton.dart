@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
-import 'package:websitefluttertest/viewmodels/ChatFolderWM.dart';
 
 class HoverButton extends StatefulWidget {
   final Widget child;
@@ -75,39 +72,3 @@ class _HoverButtonState extends State<HoverButton> with SingleTickerProviderStat
 
 
 
-
-class HistoryButtons extends StatelessWidget {
-  static const double itemHeightPercentage = 0.03;
-
-  const HistoryButtons({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<ChatFolderWM>(
-      builder: (context, viewModel, _) {
-        if (viewModel.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        double itemHeight = MediaQuery.of(context).size.height * itemHeightPercentage;
-
-        return ListView.builder(
-          itemCount: viewModel.folders.length,
-          itemBuilder: (_, index) {
-            ChatFolder folder = viewModel.folders[index];
-            bool isClicked = viewModel.isFolderClicked(folder);
-
-            return SizedBox(
-              height: itemHeight,
-              child: HoverButton(
-                child: Text(folder.name),
-                onTap: () => viewModel.toggleClickedFolders(folder),
-                isClicked: isClicked,
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-}

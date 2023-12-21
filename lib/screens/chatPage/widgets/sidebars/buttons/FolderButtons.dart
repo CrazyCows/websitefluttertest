@@ -3,79 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:websitefluttertest/models/chatUserData/ChatFolder.dart';
 import 'package:websitefluttertest/viewmodels/ChatFolderWM.dart';
 
-class HoverButton extends StatefulWidget {
-  final Widget child;
-  final Color hoverColor;
-  final Color normalColor;
-  final Color selectedColor;
-  final VoidCallback? onTap;
-  final bool isClicked;
-
-  const HoverButton({
-    Key? key,
-    required this.child,
-    this.hoverColor = Colors.lightBlue,
-    this.normalColor = Colors.lightBlueAccent,
-    this.selectedColor = Colors.deepPurple,
-    this.onTap,
-    this.isClicked = false,
-  }) : super(key: key);
-
-  @override
-  _HoverButtonState createState() => _HoverButtonState();
-}
-
-class _HoverButtonState extends State<HoverButton> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<Color?> _colorAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 600), // Duration of the fade animation
-    );
-
-    _colorAnimation = ColorTween(
-      begin: widget.normalColor,
-      end: widget.hoverColor,
-    ).animate(_animationController);
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => _animationController.forward(),
-      onExit: (_) => _animationController.reverse(),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedBuilder(
-          animation: _colorAnimation,
-          builder: (context, child) {
-            return Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: widget.isClicked ? widget.selectedColor : _colorAnimation.value,
-              ),
-              child: widget.child,
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
+import 'HoverButton.dart';
 
 class FolderSettingsButton extends StatelessWidget {
   const FolderSettingsButton({Key? key}) : super(key: key);
   static const double itemHeightPercentage = 0.03;
+  static const double maxButtonWidth = 22.0;
 
   @override
   Widget build(BuildContext context) {
@@ -95,34 +28,63 @@ class FolderSettingsButton extends StatelessWidget {
 
             return SizedBox(
               height: itemHeight,
+              width: MediaQuery.of(context).size.width,
               child: Row(
                 children: [
-                  HoverButton(
-                    child: const Icon(Icons.settings),
-                    onTap: () => viewModel.toggleClickedFolders(folder),
-                    isClicked: isClicked,
-                  ),
-                  HoverButton(
-                      child: const Icon(Icons.settings),
+                  Expanded(
+                    flex: 10,
+                    child: HoverButton(
+                      child: Text(folder.name),
                       onTap: () => viewModel.toggleClickedFolders(folder),
                       isClicked: isClicked,
-                  )],
-
-              )
-
+                    ),
+                  ),
+                  SizedBox(
+                    width: maxButtonWidth,
+                    child: HoverButton(
+                      child: const Icon(Icons.edit, size: 17.5,),
+                      onTap: () => _showCustomDialog(context, folder),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         );
-
-
-
-
-
-      }
+      },
     );
   }
 
-
+  void _showCustomDialog(BuildContext context, ChatFolder folder) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Align(
+          alignment: Alignment.center,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20), // Adjust radius size as needed
+              topRight: Radius.circular(20), // Adjust radius size as needed
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text(folder.name),
+                ),
+                body: Center(
+                  // Your widget content here
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
 }
 

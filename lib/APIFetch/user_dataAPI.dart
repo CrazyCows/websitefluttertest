@@ -24,6 +24,29 @@ Future<dynamic> fetchUserData(String path) async {
   return [];
 }
 
+Future<dynamic> postUserData(String path, Map<String, dynamic>? headers) async {
+  final Dio dio = createDio().dio;
 
+  try {
+    final response = await dio.get(
+      '/user_resource/user/$path/',
+      options: Options(
+          contentType: Headers.jsonContentType,
+          headers: headers
+      ),
+
+
+    );
+    if (response.statusCode == 200) {
+      return response.data;
+      // The cookies are automatically managed by Dio and CookieJar
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (error) {
+    print(error);
+  }
+  return [];
+}
 
 
